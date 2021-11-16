@@ -14,22 +14,38 @@ namespace icecream.Rating
     {
         [FunctionName("GetRatings")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] 
+                HttpRequest req,
+                [CosmosDB(databaseName: "icecream", collectionName: "ratings", SqlQuery = "SELECT * FROM ratings", ConnectionStringSetting = "COSMOS_CONNECTION_STRING")] IEnumerable<Rating> ratings,
+                ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            string userId = req.Query["userId"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            userId = userId ?? data?.userId;
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            // Connect to Cosmos DB
+
+
+
+            string responseMessage = string.IsNullOrEmpty(userId)
+                ? "This HTTP triggered function executed successfully. Pass a userId in the query string or in the request body for a personalized response." : "";
 
             return new OkObjectResult(responseMessage);
         }
+    }
+
+    public class Rating
+    {
+        public string id { get; set; }
+        public string userId { get; set; }
+        public string productId { get; set; }
+        public string timestamp { get; set; }
+        public string locationName { get; set; }
+        public string rating { get; set; }
+        public string userNotes { get; set; }
     }
 }
