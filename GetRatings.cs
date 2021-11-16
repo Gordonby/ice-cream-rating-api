@@ -19,6 +19,14 @@ namespace icecream.Rating
                 [CosmosDB(databaseName: "icecream", collectionName: "ratings", SqlQuery = "SELECT * FROM ratings", ConnectionStringSetting = "COSMOS_CONNECTION_STRING")] IEnumerable<Rating> ratings,
                 ILogger log)
         {
+            if (ratings is null)
+            {
+                return new NotFoundResult();
+            }
+ 
+            return new OkObjectResult(ratings); 
+
+            /*
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             string userId = req.Query["userId"];
@@ -28,13 +36,14 @@ namespace icecream.Rating
             userId = userId ?? data?.userId;
 
             // Connect to Cosmos DB
+            */
 
-
-
+            /*
             string responseMessage = string.IsNullOrEmpty(userId)
                 ? "This HTTP triggered function executed successfully. Pass a userId in the query string or in the request body for a personalized response." : "";
 
             return new OkObjectResult(responseMessage);
+            */
         }
     }
 
