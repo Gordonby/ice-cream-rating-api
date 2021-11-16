@@ -15,7 +15,7 @@ namespace icecream.Rating
     {
         [FunctionName("GetRatings")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "null")] 
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "users/{userId}")] 
                 HttpRequest req,
                 [CosmosDB(databaseName: "icecream", collectionName: "ratings", SqlQuery = "SELECT * FROM ratings r where r.userId = {userId}", ConnectionStringSetting = "COSMOS_CONNECTION_STRING")] IEnumerable<Rating> ratings,
                 ILogger log)
