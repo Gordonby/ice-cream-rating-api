@@ -14,12 +14,14 @@ namespace icecream.Rating
     public static class GetRatings
     {
         [FunctionName("GetRatings")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] 
+        public static IActionResult Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "null")] 
                 HttpRequest req,
-                [CosmosDB(databaseName: "icecream", collectionName: "ratings", SqlQuery = "SELECT * FROM ratings", ConnectionStringSetting = "COSMOS_CONNECTION_STRING")] IEnumerable<Rating> ratings,
+                [CosmosDB(databaseName: "icecream", collectionName: "ratings", SqlQuery = "SELECT * FROM ratings r where r.userId = {userId}", ConnectionStringSetting = "COSMOS_CONNECTION_STRING")] IEnumerable<Rating> ratings,
                 ILogger log)
         {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
             if (ratings is null)
             {
                 return new NotFoundResult();
@@ -28,7 +30,7 @@ namespace icecream.Rating
             return new OkObjectResult(ratings); 
 
             /*
-            log.LogInformation("C# HTTP trigger function processed a request.");
+        
 
             string userId = req.Query["userId"];
 
