@@ -1,2 +1,2 @@
-# ice-cream-rating-api-
+# ice-cream-rating-api
 For all rating APIs.
