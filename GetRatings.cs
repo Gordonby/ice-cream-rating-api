@@ -15,7 +15,7 @@ namespace icecream.Rating
     {
         [FunctionName("GetRatings")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "ratings/users/{userId}")] 
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "GetRatings/{userId}")] 
                 HttpRequest req,
                 [CosmosDB(
                     databaseName: "icecream", 
