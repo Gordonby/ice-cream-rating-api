@@ -4,9 +4,9 @@
 name: Green env Deploy Ratings
 
 on:
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
   workflow_dispatch:
 
 env:
