@@ -24,6 +24,7 @@ namespace icecream.Rating
                     SqlQuery = "SELECT * FROM ratings r where r.Id={ratingId}")] IEnumerable<Rating> ratings,
                 ILogger log)
         {
+            // Log
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             if (ratings is null)
