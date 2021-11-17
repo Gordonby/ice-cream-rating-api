@@ -21,7 +21,7 @@ namespace icecream.Rating
                     databaseName: "icecream", 
                     collectionName: "ratings", 
                     ConnectionStringSetting = "COSMOS_CONNECTION_STRING",
-                    SqlQuery = "SELECT * FROM ratings r where r.Id={ratingId}")] IEnumerable<Rating> ratings,
+                    SqlQuery = "SELECT * FROM ratings r where r.id={ratingId}")] IEnumerable<Rating> ratings,
                 ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
