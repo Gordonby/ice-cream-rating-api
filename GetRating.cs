@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -10,26 +11,46 @@ using Newtonsoft.Json;
 
 namespace icecream.Rating
 {
-    public static class GetRating
+    public static class GetRating 
     {
         [FunctionName("GetRating")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+        public static IActionResult Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "ratings/rating/{ratingId}")] 
+                HttpRequest req,
+                [CosmosDB(
+                    databaseName: "icecream", 
+                    collectionName: "ratings", 
+                    ConnectionStringSetting = "COSMOS_CONNECTION_STRING",
+                    SqlQuery = "SELECT * FROM ratings r where r.Id={ratingId}")] IEnumerable<Rating> ratings,
+                ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            if (ratings is null)
+            {
+                return new NotFoundResult();
+            }
+ 
+            return new OkObjectResult(ratings); 
+
+            /*
+        
+
+            string userId = req.Query["userId"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            userId = userId ?? data?.userId;
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            // Connect to Cosmos DB
+            */
+
+            /*
+            string responseMessage = string.IsNullOrEmpty(userId)
+                ? "This HTTP triggered function executed successfully. Pass a userId in the query string or in the request body for a personalized response." : "";
 
             return new OkObjectResult(responseMessage);
+            */
         }
     }
 }
